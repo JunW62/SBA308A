@@ -1,4 +1,4 @@
-const body = document.body;
+const header = document.querySelector("header");
 const sliders = document.querySelectorAll(".slide");
 const leftBtn = document.getElementById("left");
 const rightBtn = document.getElementById("right");
@@ -6,7 +6,7 @@ const rightBtn = document.getElementById("right");
 let activeSlide = 1;
 
 function setBgBody() {
-  body.style.backgroundImage = sliders[activeSlide].style.backgroundImage;
+  header.style.backgroundImage = sliders[activeSlide].style.backgroundImage;
 }
 
 setBgBody();

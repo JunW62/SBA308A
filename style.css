@@ -5,27 +5,32 @@
   box-sizing: border-box;
 }
 
-/* :root {
-} */
+:root {
+  --primary-color: #17202a;
+  --secondery-color: #273746;
+  --light-gray-color: #ddd;
+  --white-color: #fff;
+  --green-color: #28b463;
+  --red-color: rgb(230, 0, 18);
+}
 
-body {
+header {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overflow: hidden;
   background-position: center center;
   background-size: cover;
   transition: all 0.5s ease-in;
   /* background-image: url("./images/image1.jpg"); */
 }
 
-/* body {
+body {
   height: 100vh;
   font-family: "poppins", sans-serif;
-} */
+}
 
-body::before {
+header::before {
   content: "";
   position: absolute;
   top: 0;
@@ -33,7 +38,6 @@ body::before {
   height: 100vh;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
-  z-index: -1;
 }
 
 .slider-container {
@@ -42,7 +46,6 @@ body::before {
   width: 70vw;
   position: relative;
   overflow: hidden;
-  border: 3px solid white;
   border-radius: 5px;
 }
 
@@ -56,24 +59,25 @@ body::before {
   position: absolute;
   top: -15vh;
   left: -15vw;
-  transition: all 1s ease-in;
   z-index: 1;
+  transition: all 1s ease-in;
 }
 
 .slide.active {
   opacity: 1;
-  transform: translateX(0%);
+  transform: translateX(-0%);
 }
 
 .arrow {
-  position: fixed;
-  background-color: #ddd;
-  color: #111;
-  padding: 25px;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.23);
+  color: #fff;
+  padding: 15px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  border-radius: 5%;
+  border-radius: 50%;
+  z-index: 5;
 }
 
 .arrow i {
@@ -85,14 +89,81 @@ body::before {
 }
 
 .left-arrow {
-  left: calc(15vw - 65px);
+  left: 0px;
 }
 
 .right-arrow {
-  right: calc(15vw - 65px);
+  right: 0px;
 }
 
 button {
   outline: none;
   border: none;
 }
+
+.slider-content {
+  position: relative;
+  top: 67%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+  padding: 4rem;
+  background-color: rgba(0, 0, 0, 0.23);
+}
+
+/* .slider-content h2 {
+  color: var(--white-color);
+  font-size: 3rem;
+}
+
+.slider-content .games-short-details {
+  color: var(--white-color);
+  padding: 1rem;
+  width: 50%;
+}
+
+.slider-content .g-details {
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+  margin-left: 1rem;
+}
+
+.g-details .developer {
+  color: var(--white-color);
+  background: #eb984e;
+  padding: 0.5rem;
+  border-radius: 20px;
+}
+
+.g-details .genre {
+  color: var(--white-color);
+  background: #eb984e;
+  padding: 0.5rem;
+  border-radius: 20px;
+}
+
+.g-details .year {
+  color: var(--white-color);
+  background: var(--green-color);
+  padding: 0.5rem;
+  border-radius: 20px;
+}
+
+.slider-content button {
+  padding: 0.7rem;
+  outline: none;
+  border: none;
+  margin: 2rem 1rem;
+  background: var(--red-color);
+  color: var(--white-color);
+  font-family: inherit;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.slider-content button i {
+  margin-right: 1rem;
+  font-size: 2rem;
+} */
