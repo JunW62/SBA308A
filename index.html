@@ -3,15 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Color Palette</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="style.css" />
+    <script src="./carousel.js" defer></script>
+    <script src="./index.js" defer></script>
+    <title>GameGo</title>
   </head>
   <body>
-    <h1>Color Palette Generator</h1>
-    <input type="text" id="search-box" placeholder="Search palettes" />
-    <button onclick="generatePalette()">Generate Palette</button>
-    <div id="palette-container"></div>
-    <script src="index.js"></script>
-    <script src="carousel.js"></script>
+    <div class="slider-container">
+      <div
+        class="slide active"
+        style="background-image: url('./images/image1.jpg');"
+      ></div>
+      <div
+        class="slide"
+        style="background-image: url('./images/image2.jpg');"
+      ></div>
+      <div
+        class="slide"
+        style="background-image: url('./images/image3.jpg');"
+      ></div>
+      <div
+        class="slide"
+        style="background-image: url('./images/image4.jpg');"
+      ></div>
+
+      <button class="arrow left-arrow" id="left">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button class="arrow right-arrow" id="right">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
   </body>
 </html>
