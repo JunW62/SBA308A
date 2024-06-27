@@ -1,5 +1,6 @@
 const header = document.querySelector("header");
 const sliders = document.querySelectorAll(".slide");
+const sliderContent = document.querySelectorAll(".slider-content");
 const leftBtn = document.getElementById("left");
 const rightBtn = document.getElementById("right");
 
@@ -16,16 +17,26 @@ function setActiveSlide() {
   sliders[activeSlide].classList.add("active");
 }
 
+function setContent() {
+  sliderContent.forEach((sliderContents) =>
+    sliderContents.classList.remove("active")
+  );
+  sliderContent[activeSlide].classList.add("active");
+  console.log(sliderContent);
+}
+
 rightBtn.addEventListener("click", () => {
   nextSlide();
   setBgBody();
   setActiveSlide();
+  setContent();
 });
 
 leftBtn.addEventListener("click", () => {
   previousSlide();
   setBgBody();
   setActiveSlide();
+  setContent();
 });
 
 function nextSlide() {
@@ -46,4 +57,5 @@ setInterval(() => {
   nextSlide();
   setBgBody();
   setActiveSlide();
+  setContent();
 }, 7000);
