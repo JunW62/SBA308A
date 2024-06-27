@@ -8,11 +8,32 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./carousel.js" defer></script>
     <script src="./index.js" defer></script>
-    <title>GameGo</title>
+    <title>GOGam</title>
   </head>
   <body>
+    <div class="menus">
+      <div class="container">
+        <nav>
+          <a href="./index.html">
+            <div class="logo">
+              <i class="fa-brands fa-golang"></i>
+              <h2>Gam</h2>
+            </div>
+          </a>
+          <form id="form">
+            <input type="text" placeholder="Search Games" id="search" />
+          </form>
+          <ul>
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="#games">Games</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
     <header>
       <div class="slider-container">
         <div
@@ -110,5 +131,21 @@
         </button>
       </div>
     </header>
+
+    <div class="games-content" id="games">
+      <div class="container">
+        <h2 class="label">What's Popular</h2>
+        <div class="games-details">
+          <div class="games">
+            <img src="./images/image1.jpg" alt="" />
+            <p class="game-title">Hogwarts Legacy</p>
+            <div class="short-des">
+              <p class="year">2023</p>
+              <p class="rating">9.0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

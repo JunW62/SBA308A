@@ -1,8 +1,17 @@
 const header = document.querySelector("header");
+const menus = document.querySelector(".menus");
 const sliders = document.querySelectorAll(".slide");
 const sliderContent = document.querySelectorAll(".slider-content");
 const leftBtn = document.getElementById("left");
 const rightBtn = document.getElementById("right");
+
+window.addEventListener("scroll", () => {
+  if (document.documentElement.scrollTop > 20) {
+    menus.classList.add("sticky");
+  } else {
+    menus.classList.remove("sticky");
+  }
+});
 
 let activeSlide = 1;
 

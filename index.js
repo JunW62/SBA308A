@@ -1,44 +1,26 @@
-document.getElementById("search-box").addEventListener("input", function () {
-  const colorInput = this.value.trim();
-  if (colorInput.length === 0) {
-    document.getElementById("palette-container").innerHTML = ""; // Clear previous results if input is empty
-    return;
-  }
+"use strict";
 
-  // Validate and format color input for API request
-  let formattedColor = colorInput.startsWith("#")
-    ? colorInput.substring(1)
-    : colorInput;
-  formattedColor = formattedColor.replace("#", ""); // Ensuring no hash is present before sending to API
+const searchEl = document.getElementById("search");
+const formEl = document.getElementById("form");
 
-  // Use the API to get a palette based on the input color
-  generatePaletteFromAPI("#" + formattedColor);
-});
+//tw24k2z29pj4lk5dtz7u85t8jqdmfy
 
-function generatePaletteFromAPI(baseColor) {
-  axios
-    .get(
-      `https://www.thecolorapi.com/scheme?hex=${baseColor.substring(
-        1
-      )}&mode=monochrome&count=4`
-    )
-    .then((response) => {
-      const colors = response.data.colors.map((color) => color.hex.value);
-      displayPalette(colors);
-    })
-    .catch((error) => console.error("Error fetching color data:", error));
-}
+// axios.defaults.baseURL = "https://api.igdb.com/v4";
 
-function displayPalette(colors) {
-  const paletteContainer = document.getElementById("palette-container");
-  paletteContainer.innerHTML = ""; // Clear previous results
-  const paletteDiv = document.createElement("div");
-  paletteDiv.className = "palette";
-  colors.forEach((color) => {
-    const colorDiv = document.createElement("div");
-    colorDiv.style.backgroundColor = color;
-    colorDiv.className = "color";
-    paletteDiv.appendChild(colorDiv);
+const clientId = "tw24k2z29pj4lk5dtz7u85t8jqdmfy";
+const clientSecret = "4zcz1nf8dn5308ye9ugzkamjb87ris";
+const grantType = "client_credentials";
+
+const authUrl = `https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=${grantType}`;
+
+axios
+  .post(authUrl)
+  .then((response) => {
+    const { access_token, expires_in, token_type } = response.data;
+    console.log("Access Token:", access_token);
+    console.log("Expires In:", expires_in);
+    console.log("Token Type:", token_type);
+  })
+  .catch((error) => {
+    console.error("Error fetching access token:", error);
   });
-  paletteContainer.appendChild(paletteDiv);
-}
