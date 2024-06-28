@@ -31,7 +31,7 @@ function setContent() {
     sliderContents.classList.remove("active")
   );
   sliderContent[activeSlide].classList.add("active");
-  console.log(sliderContent);
+  // console.log(sliderContent);
 }
 
 rightBtn.addEventListener("click", () => {
