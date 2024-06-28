@@ -61,7 +61,6 @@ nav {
 }
 
 .logo h2 {
-  margin-left: 0.3rem;
   font-size: 3rem;
   color: var(--white-color);
 }
@@ -96,6 +95,7 @@ nav ul a {
 }
 
 /* ================menu ends====================*/
+
 header {
   display: flex;
   align-items: center;
@@ -310,4 +310,37 @@ button {
 .games:hover .short-des {
   transform: translateY(0%);
   transition: all 0.5s ease-in;
+}
+
+.pagination {
+  padding: 4rem 0;
+}
+
+.pagination ul {
+  display: flex;
+  list-style-type: none;
+}
+
+.pagination ul li {
+  margin: 0 0 0.7rem;
+  box-shadow: 0 0 10px var(--secondery-color);
+  color: var(--green-color);
+  padding: 0.7rem 1.5rem;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease-in;
+}
+
+.pagination ul li:nth-child(1) {
+  margin-left: none;
+}
+
+.pagination ul li:active {
+  transform: scale(1.5);
+}
+
+a {
+  text-decoration: none;
 }
