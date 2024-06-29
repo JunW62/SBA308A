@@ -84,6 +84,8 @@ nav ul a {
   font-size: 1.1rem;
 }
 
+/* Search bar */
+
 #form .searchbar {
   width: 650px;
   outline: none;
@@ -96,7 +98,8 @@ nav ul a {
   justify-content: space-between;
 }
 
-#form input {
+.searchbar input {
+  margin-left: 1rem;
   outline: none;
   border: none;
   font-family: inherit;

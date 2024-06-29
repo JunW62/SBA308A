@@ -9,6 +9,7 @@ const proxyUrl = "http://localhost:8080/";
 
 const searchEl = document.getElementById("search");
 const formEl = document.getElementById("form");
+const searchBtn = document.querySelector(".searchbar button");
 const labelText = document.querySelector(".label");
 const gamesContainer = document.querySelector(".games-details");
 const paginationEL = document.querySelectorAll(".pagination ul li");
@@ -120,7 +121,10 @@ function showGames(page) {
 }
 // search
 
-formEl.addEventListener("submit", async (e) => {
+formEl.addEventListener("submit", startSearch);
+searchBtn.addEventListener("click", startSearch);
+
+async function startSearch(e) {
   e.preventDefault();
   const searchTerm = searchEl.value;
   if (searchTerm && searchTerm !== "") {
@@ -128,7 +132,7 @@ formEl.addEventListener("submit", async (e) => {
     labelText.innerHTML = `${searchResults.length} Results for "${searchTerm}"`;
     searchEl.value = "";
   }
-});
+}
 
 // pagination
 
