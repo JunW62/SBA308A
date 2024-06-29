@@ -4,16 +4,19 @@ const clientId = "tw24k2z29pj4lk5dtz7u85t8jqdmfy";
 const clientSecret = "u9tqrr4zz82lqqsf3x6tgg0op5817p";
 
 const apiUrl = "https://api.igdb.com/v4/games";
+const searchUrl = "https://api.igdb.com/v4/search";
 const proxyUrl = "http://localhost:8080/";
 
 const searchEl = document.getElementById("search");
 const formEl = document.getElementById("form");
+const labelText = document.querySelector(".label");
 const gamesContainer = document.querySelector(".games-details");
 const paginationEL = document.querySelectorAll(".pagination ul li");
 const paginationContainer = document.querySelector(".pagination ul");
 
 let cachedToken = null;
 let tokenExpiry = null;
+let currentGames = [];
 
 // get the token
 
@@ -38,30 +41,36 @@ async function getAccessToken() {
 
 getGames();
 
-async function getGames() {
+async function getGames(searchTerm = "") {
+  gamesContainer.innerHTML = "";
   const token = await getAccessToken();
-
   if (token) {
+    let endpoint = searchTerm ? searchUrl : apiUrl;
+    let query = searchTerm
+      ? `fields name, game.name, game.genres.name, game.cover.url, game.release_dates.y, game.platforms.name; search "${searchTerm}"; limit 40;`
+      : "fields name, release_dates.y, genres.name, cover.url; sort aggregated_rating_count desc; where cover.url != null; limit 200;";
+
     try {
-      const response = await axios.post(
-        proxyUrl + apiUrl, // Assuming your proxy forwards correctly
-        "fields name, release_dates.y, genres.name, cover.url; sort aggregated_rating_count desc; where cover.url != null; limit 200;", // Query for IGDB  & release_dates.y != null & genres.name != null
-        {
-          headers: {
-            "Content-Type": "text/plain", // Required by IGDB
-            "Client-ID": clientId,
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // console.log(response.data);
-      showGames(response.data, 1);
-      setupPagination(response.data);
+      const response = await axios.post(proxyUrl + endpoint, query, {
+        headers: {
+          Accept: "application/json", // For searchUrl header
+          "Content-Type": "text/plain", // For apiUrl headerthe IGDB API
+          "Client-ID": clientId,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response.data.length);
+      currentGames = response.data;
+      showGames(1);
+      setupPagination(currentGames);
+      return currentGames;
     } catch (error) {
       console.error("Error fetching games:", error);
+      return [];
     }
   } else {
     console.error("Failed to get access token.");
+    return [];
   }
 }
 
@@ -71,14 +80,15 @@ let currentPage = 1;
 let numPages = 0;
 const itemsPerPage = 20;
 
-function showGames(games, page) {
+function showGames(page) {
   const startIndex = (page - 1) * 20;
   const endIndex = startIndex + 20;
-  const gamesToDisplay = games.slice(startIndex, endIndex);
+  const gamesToDisplay = currentGames.slice(startIndex, endIndex);
 
   gamesContainer.innerHTML = "";
   gamesToDisplay.forEach((game) => {
-    const { name, release_dates, genres, cover } = game;
+    const gameData = game.game || game;
+    const { name, release_dates, genres, cover } = gameData;
 
     const imageUrl =
       cover && cover.url
@@ -86,7 +96,7 @@ function showGames(games, page) {
         : "./images/placeholder.jpeg";
 
     const releaseYear =
-      release_dates && release_dates.length > 0
+      release_dates && release_dates.length > 0 && release_dates[0].y
         ? release_dates[0].y
         : "No release date";
 
@@ -108,6 +118,17 @@ function showGames(games, page) {
     gamesContainer.appendChild(gamesDisplay);
   });
 }
+// search
+
+formEl.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const searchTerm = searchEl.value;
+  if (searchTerm && searchTerm !== "") {
+    const searchResults = await getGames(searchTerm);
+    labelText.innerHTML = `${searchResults.length} Results for "${searchTerm}"`;
+    searchEl.value = "";
+  }
+});
 
 // pagination
 
@@ -134,6 +155,7 @@ function setupPagination(games) {
       pageItem.classList.add("active");
     }
     paginationContainer.appendChild(pageItem);
+    console.log(pageItem);
   }
 
   const nextLi = document.createElement("li");
@@ -147,17 +169,29 @@ function setupPagination(games) {
   paginationContainer.appendChild(nextLi);
 }
 
+function updatePaginationActiveClass() {
+  const pageItems = paginationContainer.querySelectorAll("li");
+  pageItems.forEach((item, index) => {
+    if (parseInt(item.textContent) === currentPage) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
+}
+
 paginationContainer.addEventListener("click", function (event) {
   const target = event.target;
   if (target.tagName === "LI") {
     const value = target.textContent.trim();
-    if (value === "Next" && currentPage < totalPages) {
+    if (value === "Next" && currentPage < numPages) {
       currentPage++;
     } else if (value === "Previous" && currentPage > 1) {
       currentPage--;
     } else if (!isNaN(parseInt(value))) {
       currentPage = parseInt(value);
     }
-    showGames(games, currentPage);
+    showGames(currentPage);
+    updatePaginationActiveClass();
   }
 });

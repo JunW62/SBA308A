@@ -24,13 +24,13 @@ html {
   color: var(--light-gray-color);
   padding: 0.5rem;
   border-left: 7px var(--red-color) solid;
-  margin: 2rem 0;
+  margin: 2rem auto;
 }
 
 .container {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 img {
@@ -108,7 +108,7 @@ header {
 }
 
 .menus.sticky {
-  background: rgba(0, 0, 0, 0.16);
+  background: rgba(0, 0, 0, 0.9);
   color: var(--white-color);
 }
 
@@ -217,7 +217,7 @@ button {
 .slider-content .games-short-details {
   color: var(--white-color);
   padding: 1rem;
-  width: 50%;
+  width: 60%;
 }
 
 .slider-content .g-details {
@@ -242,7 +242,7 @@ button {
 }
 
 .slider-content button {
-  padding: 0.7rem 2rem;
+  padding: 0.7rem 1rem;
   outline: none;
   border: none;
   margin: 2rem 1rem;
@@ -252,7 +252,7 @@ button {
   font-size: 1rem;
   display: flex;
   align-items: center;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
 }
 .slider-content button i {
@@ -331,6 +331,11 @@ button {
   border-radius: 5px;
   font-size: 1rem;
   transition: all 0.3s ease-in;
+}
+
+.pagination ul li.active {
+  box-shadow: 0 0 10px var(--red-color);
+  color: var(--green-color);
 }
 
 .pagination ul li:nth-child(1) {
