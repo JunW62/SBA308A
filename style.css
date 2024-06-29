@@ -84,14 +84,44 @@ nav ul a {
   font-size: 1.1rem;
 }
 
-#form input {
+#form .searchbar {
   width: 650px;
   outline: none;
   border: none;
   border-radius: 20px;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1rem;
   font-family: inherit;
   background: var(--light-gray-color);
+  display: flex;
+  justify-content: space-between;
+}
+
+#form input {
+  outline: none;
+  border: none;
+  font-family: inherit;
+  background: var(--light-gray-color);
+}
+
+.searchbar i {
+  color: var(--green-color);
+  font-size: 1rem;
+}
+
+.searchbar button {
+  outline: none;
+  border: none;
+  background: var(--light-gray-color);
+  cursor: pointer;
+}
+
+.searchbar button:hover {
+  outline-color: rgba(0, 0, 0, 0.06);
+  outline-width: 8px;
+  outline-style: solid;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  cursor: pointer;
 }
 
 /* ================menu ends====================*/
