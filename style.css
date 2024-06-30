@@ -127,6 +127,23 @@ nav ul a {
   cursor: pointer;
 }
 
+/* favorite button*/
+
+.favorite {
+  background: rgba(239, 240, 274, 0.16);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--white-color);
+  padding: 12px;
+  margin: 1.5rem;
+  box-shadow: 0 0 10px var(--secondery-color);
+}
+
+.favorite i {
+  font-size: 1.1rem;
+  color: var(--light-gray-color);
+}
+
 /* ================menu ends====================*/
 
 header {
@@ -159,6 +176,7 @@ header::before {
   height: 100vh;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
 }
 
 .slider-container {
@@ -344,6 +362,8 @@ button {
   transform: translateY(0%);
   transition: all 0.5s ease-in;
 }
+
+/* pagination */
 
 .pagination {
   padding: 4rem 0;

@@ -10,6 +10,7 @@ const proxyUrl = "http://localhost:8080/";
 const searchEl = document.getElementById("search");
 const formEl = document.getElementById("form");
 const searchBtn = document.querySelector(".searchbar button");
+const favoriteBtn = document.querySelector(".favorite i");
 const labelText = document.querySelector(".label");
 const gamesContainer = document.querySelector(".games-details");
 const paginationEL = document.querySelectorAll(".pagination ul li");
@@ -134,6 +135,21 @@ async function startSearch(e) {
   }
 }
 
+//favorite
+
+favoriteBtn.onmouseover = () => {
+  favoriteBtn.classList.remove("fa-regular");
+  favoriteBtn.classList.add("fa-solid");
+  favoriteBtn.classList.add("fa-beat-fade");
+  favoriteBtn.style.color = "red";
+};
+
+favoriteBtn.onmouseout = () => {
+  favoriteBtn.classList.remove("fa-solid");
+  favoriteBtn.classList.remove("fa-beat-fade");
+  favoriteBtn.classList.add("fa-regular");
+  favoriteBtn.style.color = " #ddd";
+};
 // pagination
 
 function setupPagination(games) {
