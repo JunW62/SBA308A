@@ -129,7 +129,8 @@ nav ul a {
 
 /* favorite button*/
 
-.favorite {
+.favorite,
+.get-favorite {
   background: rgba(239, 240, 274, 0.16);
   border-radius: 50%;
   cursor: pointer;
@@ -139,10 +140,11 @@ nav ul a {
   box-shadow: 0 0 10px var(--secondery-color);
 }
 
-.favorite i {
+/* .favorite i,
+.get-favorite i {
   font-size: 1.1rem;
   color: var(--light-gray-color);
-}
+} */
 
 /* ================menu ends====================*/
 
@@ -160,6 +162,7 @@ header {
 .menus.sticky {
   background: rgba(0, 0, 0, 0.9);
   color: var(--white-color);
+  z-index: 100;
 }
 
 body {
@@ -303,9 +306,10 @@ button {
   font-size: 1rem;
   display: flex;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 25px;
   cursor: pointer;
 }
+
 .slider-content button i {
   margin-right: 1rem;
   font-size: 2rem;
@@ -327,6 +331,13 @@ button {
   background: var(--secondery-color);
   position: relative;
   overflow: hidden;
+}
+
+.games .favorite {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
 }
 
 .games img {
@@ -401,4 +412,10 @@ button {
 
 a {
   text-decoration: none;
+}
+
+.no-favorite {
+  color: var(--white-color);
+  font-size: 3rem;
+  padding: 20px;
 }

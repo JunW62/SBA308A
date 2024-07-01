@@ -67,4 +67,4 @@ setInterval(() => {
   setBgBody();
   setActiveSlide();
   setContent();
-}, 7000);
+}, 10000);
