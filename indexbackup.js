@@ -1,41 +1,95 @@
 "use strict";
 
-import { getGames } from "./api.js";
-import { toggleFavorite, favorites, favoriteBtn } from "./getfav.js";
+const clientId = "tw24k2z29pj4lk5dtz7u85t8jqdmfy";
+const clientSecret = "u9tqrr4zz82lqqsf3x6tgg0op5817p";
+
+const apiUrl = "https://api.igdb.com/v4/games";
+const proxyUrl = "http://localhost:8080/";
 
 const searchEl = document.getElementById("search");
 const formEl = document.getElementById("form");
 const searchBtn = document.querySelector(".searchbar button");
 const gameBtn = document.querySelector(".goback-game");
-export const labelText = document.querySelector(".label");
-export const gamesContainer = document.querySelector(".games-details");
+const getFavoriteBtn = document.querySelector(".get-favorite I");
+const favoriteBtn = document.querySelectorAll(".favorite i");
+const labelText = document.querySelector(".label");
+const gamesContainer = document.querySelector(".games-details");
 const paginationEL = document.querySelectorAll(".pagination ul li");
 const paginationContainer = document.querySelector(".pagination ul");
 
-export let currentGames = [];
+let cachedToken = null;
+let tokenExpiry = null;
+let currentGames = [];
+let favorites = [];
+let showingFavorites = false;
 
 //Setup after DOM fully loaded
 
 document.addEventListener("DOMContentLoaded", () => {
-  gamesContainer.innerHTML = "";
   if (gameBtn) {
     gameBtn.addEventListener("click", () => {
-      getGames().then((games) => {
-        currentGames = games;
-        showGames(1, false);
-        setupPagination(currentGames, false);
-      });
+      getGames();
       labelText.innerHTML = `What's Popular`;
     });
   }
   setupEventLisenter();
-  getGames().then((games) => {
-    currentGames = games;
-    showGames(1, false);
-    setupPagination(currentGames, false);
-  });
-  // console.log(currentGames);
+  getGames();
 });
+
+// get the token
+
+async function getAccessToken() {
+  if (cachedToken && tokenExpiry > Date.now()) {
+    return cachedToken;
+  }
+
+  const authUrl = `https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`;
+  try {
+    const response = await axios.post(authUrl);
+    cachedToken = response.data.access_token;
+    tokenExpiry = Date.now() + 3600 * 1000; // Example: token expires in 1 hour
+    return cachedToken;
+  } catch (error) {
+    console.error("Error fetching access token:", error);
+    return null;
+  }
+}
+
+// get the games
+
+getGames();
+
+async function getGames(searchTerm = "") {
+  gamesContainer.innerHTML = "";
+  const token = await getAccessToken();
+  if (token) {
+    let query = searchTerm
+      ? `fields name, name, genres.name, cover.url, release_dates.y, platforms.name; search "${searchTerm}"; limit 40;`
+      : "fields name, release_dates.y, genres.name, cover.url; sort aggregated_rating_count desc; where cover.url != null; limit 200;";
+
+    try {
+      const response = await axios.post(proxyUrl + apiUrl, query, {
+        headers: {
+          "Content-Type": "text/plain", // For apiUrl headerthe IGDB API
+          "Client-ID": clientId,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response.data);
+
+      currentGames = response.data;
+      showGames(1, false);
+      setupPagination(currentGames, false);
+      return currentGames;
+    } catch (error) {
+      console.error("Error fetching games:", error);
+      return [];
+    }
+  } else {
+    console.error("Failed to get access token.");
+    return [];
+  }
+}
 
 // display games
 
@@ -43,7 +97,7 @@ let currentPage = 1;
 let numPages = 0;
 const itemsPerPage = 20;
 
-export function showGames(page, showFav = false) {
+function showGames(page, showFav = false) {
   let gamesToDisplay = showFav ? favorites : currentGames;
   if (showFav) {
     gamesToDisplay = favorites;
@@ -121,7 +175,6 @@ function setupEventLisenter() {
     } else {
       console.error("Game data not found for ID:", gameIndex);
     }
-    console.log(event.target);
   });
 
   gamesContainer.addEventListener("mouseout", function (event) {
@@ -129,13 +182,6 @@ function setupEventLisenter() {
       event.target.classList.remove("fa-solid", "fa-beat-fade");
       event.target.classList.add("fa-regular");
       event.target.style.color = "#ddd";
-    }
-    if (event.target.classList.contains("favSelected")) {
-      console.log(event.target);
-      event.target.classList.remove("fa-beat-fade");
-      event.target.classList.add("fa-solid");
-      event.target.style.color = "red";
-      console.log("Mouseout event triggered");
     }
   });
 }
@@ -150,17 +196,74 @@ async function startSearch(e) {
   const searchTerm = searchEl.value;
   if (searchTerm && searchTerm !== "") {
     const searchResults = await getGames(searchTerm);
-    currentGames = searchResults;
-    showGames(1, false);
-    setupPagination(currentGames, false);
     labelText.innerHTML = `${searchResults.length} Results for "${searchTerm}"`;
     searchEl.value = "";
   }
 }
 
+//Get favorite
+
+getFavoriteBtn.addEventListener("mouseover", () => {
+  console.log("Mouseover event triggered");
+  getFavoriteBtn.classList.remove("fa-regular");
+  getFavoriteBtn.classList.add("fa-solid");
+  getFavoriteBtn.classList.add("fa-beat-fade");
+  getFavoriteBtn.style.color = "red";
+});
+
+getFavoriteBtn.addEventListener("mouseout", () => {
+  getFavoriteBtn.classList.remove("fa-solid");
+  getFavoriteBtn.classList.remove("fa-beat-fade");
+  getFavoriteBtn.classList.add("fa-regular");
+  getFavoriteBtn.style.color = " #ddd";
+});
+
+function toggleFavorite(game, buttonElement) {
+  const gameId = game.id;
+  const isFavorite = favorites.some((fav) => fav.id === gameId);
+  if (isFavorite) {
+    favorites = favorites.filter((fav) => fav.id !== gameId); // Remove from favorites
+    buttonElement.classList.remove(
+      "favSelected",
+      "fa-solid",
+      "fa-beat-fade",
+      "unclicked"
+    );
+    buttonElement.classList.add("fa-regular");
+    buttonElement.style.color = "#ddd";
+    console.log("Removed from favorites:", game.name);
+  } else {
+    favorites.push(game); // Add to favorites
+    buttonElement.classList.add("favSelected");
+    buttonElement.classList.remove("fa-beat-fade", "unclicked");
+    console.log("Added to favorites:", game.name);
+  }
+  console.log(isFavorite);
+}
+
+getFavoriteBtn.addEventListener("click", (e) => {
+  showingFavorites = !showingFavorites;
+  if (favorites.length === 0) {
+    labelText.innerHTML = `Your have 0 Favorite Game`;
+    gamesContainer.innerHTML =
+      "<p class='no-favorite'>No favorite game has been selected.</p>";
+    setupPagination([], true);
+  } else if (favorites.length === 1) {
+    showGames(1, true);
+    labelText.innerHTML = `Your have 1 Favorite Game`;
+    setupPagination(favorites, true);
+  } else {
+    showGames(1, true);
+    labelText.innerHTML = `Your have ${favorites.length} Favorite Games`;
+    setupPagination(favorites, true);
+  }
+  // console.log(favorites);
+  // console.log(favGames);
+});
+
 // pagination
 
-export function setupPagination(games, showFav) {
+function setupPagination(games, showFav) {
   const numPages = Math.ceil(games.length / itemsPerPage);
 
   paginationContainer.innerHTML = ""; // Clear existing
