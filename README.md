@@ -31,15 +31,20 @@ This project is developed forassignment of JavaScript Web Application, showcasin
    ```bash
    cd yourproject
    ```
-3. Navigate to the cors-anywhere directory:
+3. Clone the CORS Anywhere repository:
+   ```bash
+   git clone https://github.com/Rob--W/cors-anywhere.git
+   ```
+4. Navigate to the cors-anywhere directory:
    ```bash
    cd cors-anywhere
    ```
-4. Install dependencies (if any):
+5. Install dependencies (if any):
    ```bash
    npm install
    ```
-5. Start the application to intiate the cors
+6. Start the application to intiate the cors
+
    ```bash
    npm start
    ```
